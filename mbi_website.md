@@ -35,7 +35,7 @@ This document is written to be directly usable as input for an autonomous coding
 
 1. `index.html` – Home / Landing page
 2. `survey.html` – Questionnaire (5 sections / pages)
-3. `thankyou.html` – Final page + email submission
+3. `thankyou.html` – Final page + email/answers submission
 
 Optional:
 
@@ -116,7 +116,7 @@ Each section is shown sequentially (one section per screen).
 * Two **cards**, side by side
 * Each card contains:
 
-  * Image (from CSV `pic` field)
+  * Image (from CSV `pic` field, 100x100 pixels), if not present, do not add anything
   * Outlet name
 * Clicking a card selects it
 
@@ -185,7 +185,7 @@ lariachetira,L’Aria che Tira (La7),talk,https://mbi.github.io/assets/aria.png
 ### Strategy
 
 * Survey responses submitted to a **Google Form** via POST
-* Google Form is created manually by PI
+* Google Form is created manually by PI - I will need some guidance here
 
 ### Required Google Form fields
 
@@ -195,12 +195,15 @@ Hidden or prefilled:
 * timestamp
 
 Per comparison:
-
+* interview_id (a regular id)
 * comparison_id
 * outlet_left_codename
 * outlet_right_codename
 * chosen_outlet_codename OR `dk`
 * section_type
+* email (replicated for each comparison once the respondent has finished the interview)
+
+*IMPORTANT*. EVEN IF THE RESPONDENT DOESN'T COMPLETE THE QUESTIONNAIRE, THE DATA MUST BE SAVED
 
 ### Implementation
 
@@ -225,7 +228,8 @@ Text example:
 
 ### Email handling
 
-* Email submitted to **separate Google Form** (recommended)
+* Email submitted to the same Google form and replicated for each comparison ("NA" if the user didn't finish the interview)
+
 * Explicit text:
 
 > Email addresses will be used **only** for the prize draw and will not be linked to survey responses.
@@ -259,8 +263,8 @@ Not allowed:
 
 ## 10. Styling guidelines (`style.css`)
 
-* Neutral colors
-* White background
+* Colors must follow the palette of the logo (pasted to the prompt)
+* White/light grey background
 * Clear contrast
 * No animations
 * Mobile-first
@@ -271,7 +275,7 @@ Not allowed:
 
 Displayed before first comparison:
 
-> By proceeding, you confirm that you are participating voluntarily and that your responses will be used for academic research purposes only. No personally identifying information is required.
+> By proceeding, you confirm that you are participating voluntarily and that your responses will be used for academic research purposes only. Personally identifying information will be used anonymoyusly, only to grant the price. Every other info will be deleted after data collection.
 
 Checkbox: “I agree” (required to continue)
 
@@ -281,7 +285,6 @@ Checkbox: “I agree” (required to continue)
 
 * Host on GitHub Pages (`username.github.io/MBI`)
 * Ensure relative paths
-* CSV must be publicly accessible
 
 ---
 
