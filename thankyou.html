@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Grazie per aver partecipato a MBI – Media Bias in Italy">
+  <title>Grazie – MBI</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="header">
+      <img src="assets/logo.png" alt="MBI Logo" class="logo" style="max-width: 120px;">
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <div class="card thankyou-content">
+          <div class="thankyou-icon">🎉</div>
+          <h1 class="thankyou-title">Grazie per aver partecipato!</h1>
+          <p class="thankyou-text">
+            Il tuo contributo è prezioso per la nostra ricerca sull'orientamento politico dei media italiani.
+          </p>
+
+          <div class="email-form" id="email-form">
+            <p style="margin-bottom: 1.5rem;">
+              Se desideri partecipare all'estrazione dei premi, inserisci il tuo indirizzo email qui sotto:
+            </p>
+
+            <div class="form-group">
+              <label for="email-input">Indirizzo email</label>
+              <input type="email" id="email-input" placeholder="tuaemail@esempio.com">
+            </div>
+
+            <button id="submit-email-btn" class="btn btn-primary" style="width: 100%;">
+              Partecipa all'estrazione
+            </button>
+
+            <p class="email-disclaimer">
+              Gli indirizzi email saranno utilizzati <strong>esclusivamente</strong> per l'estrazione dei premi e non saranno collegati alle risposte del questionario.
+            </p>
+          </div>
+
+          <div id="email-success" class="hidden" style="margin-top: 2rem;">
+            <p style="color: var(--color-navy); font-weight: 600;">
+              ✓ Email registrata con successo!
+            </p>
+          </div>
+
+          <div id="skip-section" style="margin-top: 2rem;">
+            <button id="skip-btn" class="btn btn-secondary">Concludi senza partecipare all'estrazione</button>
+          </div>
+
+          <div id="final-message" class="hidden" style="margin-top: 2rem;">
+            <p style="color: var(--color-text-light);">
+              Puoi chiudere questa pagina. Grazie ancora per la tua partecipazione!
+            </p>
+            <div style="margin-top: 1rem;">
+              <a href="index.html" class="btn btn-secondary">Torna alla home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 MBI – Media Bias in Italy</p>
+    </footer>
+  </div>
+
+  <script src="assets/script.js"></script>
+</body>
+</html>
