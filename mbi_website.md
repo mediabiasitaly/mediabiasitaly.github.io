@@ -201,7 +201,10 @@ Per comparison:
 * outlet_right_codename
 * chosen_outlet_codename OR `dk`
 * section_type
-* email (replicated for each comparison once the respondent has finished the interview)
+* email (replicated for each comparison once bene, io non voglio che lo fai tu, lo farò fare a un agente codex su vscode, voglio solo che mi fai un .MD dettagliato che possa dare in pasto all'agente
+￼
+￼
+the respondent has finished the interview)
 
 *IMPORTANT*. EVEN IF THE RESPONDENT DOESN'T COMPLETE THE QUESTIONNAIRE, THE DATA MUST BE SAVED
 
