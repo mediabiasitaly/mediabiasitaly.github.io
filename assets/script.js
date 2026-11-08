@@ -12,6 +12,12 @@
  *    interview_id + confronto.
  *  - EMAIL: una riga per ogni questionario completo in cui il rispondente lascia
  *    l'email. Contando le righe per email si ottengono le partecipazioni.
+ *    interview_id e respondent_id collegano le due tabelle: si puo' controllare
+ *    come ha risposto chi partecipa all'estrazione.
+ *
+ * Tempi: ogni riga di confronto ha ms_risposta (millisecondi fra la comparsa
+ * della coppia e la risposta); la riga finale ha l'ora di inizio, la durata
+ * totale e la durata "attiva" (somma dei tempi di risposta, senza le pause).
  *
  * Finche' i codici dei form non sono configurati, lo script non invia niente e
  * scrive nella console del browser le righe che avrebbe inviato.
@@ -25,31 +31,36 @@
 
 const CONFIG = {
   // Form 1: risposte. Sostituire ID_FORM_RISPOSTE e gli entry.XXXX.
-  RISPOSTE_URL: 'https://docs.google.com/forms/d/e/ID_FORM_RISPOSTE/formResponse',
+  RISPOSTE_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSfptPxbIl2pvvJxyLY0lmo6A1RVUXO48onzvmA_Op4I1rnX-A/formResponse',
   RISPOSTE: {
-    respondent_id: 'entry.XXXX01',
-    interview_id:  'entry.XXXX02',
-    gruppo:        'entry.XXXX03',
-    direzione:     'entry.XXXX04',
-    sezione:       'entry.XXXX05',
-    confronto:     'entry.XXXX06',
-    outlet_a:      'entry.XXXX07',
-    outlet_b:      'entry.XXXX08',
-    risposta:      'entry.XXXX09',
-    sicurezza:     'entry.XXXX10',
-    freq_tg:       'entry.XXXX11',
-    freq_talk:     'entry.XXXX12',
-    freq_web:      'entry.XXXX13',
-    timestamp:     'entry.XXXX14'
+    respondent_id: 'entry.1679972644',
+    interview_id:  'entry.932935965',
+    gruppo:        'entry.513445717',
+    direzione:     'entry.404410007',
+    sezione:       'entry.1484110475',
+    confronto:     'entry.265452301',
+    outlet_a:      'entry.562222780',
+    outlet_b:      'entry.182689568',
+    risposta:      'entry.401432635',
+    sicurezza:     'entry.491505873',
+    freq_tg:       'entry.2128348510',
+    freq_talk:     'entry.1852585603',
+    freq_web:      'entry.201842349',
+    timestamp:     'entry.715894263',
+    ms_risposta:   'entry.455160610',
+    inizio:        'entry.1132708696',
+    durata_sec:    'entry.98289760',
+    durata_attiva_sec: 'entry.1902027220'
   },
 
   // Form 2: email per l'estrazione. Sostituire ID_FORM_EMAIL e gli entry.XXXX.
-  EMAIL_URL: 'https://docs.google.com/forms/d/e/ID_FORM_EMAIL/formResponse',
+  EMAIL_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSc5mDW3hPknLis0J_lnsRkjbLCgF_dQKO05qidEZecv-OABFg/formResponse',
   EMAIL: {
-    email:        'entry.YYYY01',
-    gruppo:       'entry.YYYY02',
-    interview_id: 'entry.YYYY03',
-    timestamp:    'entry.YYYY04'
+    email:        'entry.254877118',
+    gruppo:       'entry.1786130453',
+    interview_id: 'entry.1744133089',
+    timestamp:    'entry.1465504810',
+    respondent_id: 'entry.955464814'
   },
 
   // Sezioni nell'ordine in cui compaiono, con il numero di confronti
@@ -136,17 +147,22 @@ function show(screenId) {
 // INVIO AI GOOGLE FORM
 // ============================================================================
 
-function isConfigured(url, fields) {
-  return !url.includes('ID_FORM') && !Object.values(fields).some(v => v.includes('XXXX') || v.includes('YYYY'));
-}
+function isPlaceholder(entry) { return entry.includes('XXXX') || entry.includes('YYYY'); }
 
+// Invia solo i campi configurati: un campo con il segnaposto (entry.XXXX..) viene
+// saltato, cosi' il form funziona anche se manca ancora qualche domanda. Se manca
+// l'ID del form non parte niente.
 function send(url, fields, data) {
-  if (!isConfigured(url, fields)) {
+  if (url.includes('ID_FORM')) {
     console.info('[MBI, form non configurato] riga non inviata:', data);
     return;
   }
+  const missing = Object.keys(fields).filter(k => isPlaceholder(fields[k]));
+  if (missing.length) console.warn('[MBI] campi non ancora collegati al form, non inviati:', missing.join(', '));
   const body = new URLSearchParams();
-  Object.keys(fields).forEach(k => body.append(fields[k], data[k] == null ? '' : String(data[k])));
+  Object.keys(fields).forEach(k => {
+    if (!isPlaceholder(fields[k])) body.append(fields[k], data[k] == null ? '' : String(data[k]));
+  });
   // no-cors: Google Forms non risponde in modo leggibile, ma registra la riga.
   // keepalive: la riga parte anche se la pagina viene chiusa subito dopo.
   fetch(url, { method: 'POST', mode: 'no-cors', keepalive: true,
@@ -155,7 +171,7 @@ function send(url, fields, data) {
     .catch(err => console.error('[MBI] invio non riuscito:', err));
 }
 
-function sendAnswer(pair, value) {
+function sendAnswer(pair, value, ms) {
   send(CONFIG.RISPOSTE_URL, CONFIG.RISPOSTE, {
     respondent_id: app.respondentId,
     interview_id: app.interview.id,
@@ -166,12 +182,15 @@ function sendAnswer(pair, value) {
     outlet_a: pair.a,
     outlet_b: pair.b,
     risposta: value,
+    ms_risposta: ms,
     timestamp: new Date().toISOString()
   });
 }
 
 function sendFinal() {
   const f = app.interview.final;
+  const times = app.interview.times || {};
+  const active = Object.values(times).reduce((a, b) => a + b, 0);
   send(CONFIG.RISPOSTE_URL, CONFIG.RISPOSTE, {
     respondent_id: app.respondentId,
     interview_id: app.interview.id,
@@ -184,6 +203,9 @@ function sendFinal() {
     freq_tg: f.freq_tg || '',
     freq_talk: f.freq_talk || '',
     freq_web: f.freq_web || '',
+    inizio: app.interview.started,
+    durata_sec: Math.round((Date.now() - Date.parse(app.interview.started)) / 1000),
+    durata_attiva_sec: Math.round(active / 1000),
     timestamp: new Date().toISOString()
   });
 }
@@ -193,6 +215,7 @@ function sendEmail(email) {
     email: email,
     gruppo: app.group,
     interview_id: app.interview.id,
+    respondent_id: app.respondentId,
     timestamp: new Date().toISOString()
   });
 }
@@ -252,7 +275,8 @@ const app = {
   outlets: [],
   byCode: {},
   interview: null,
-  advanceTimer: null
+  advanceTimer: null,
+  shownAt: 0
 };
 
 function newInterview() {
@@ -264,7 +288,8 @@ function newInterview() {
     answers: {},
     index: 0,
     final: {},
-    started: new Date().toISOString()
+    times: {},
+    started: null
   };
 }
 
@@ -346,6 +371,7 @@ function renderComparison() {
 
   markSelection();
   $('prev-btn').disabled = iv.index === 0;
+  app.shownAt = performance.now();
 }
 
 function markSelection() {
@@ -359,9 +385,12 @@ function markSelection() {
 function answer(value) {
   const iv = app.interview;
   const pair = currentPair();
+  const ms = Math.round(performance.now() - app.shownAt);
   iv.answers[pair.id] = value;
+  iv.times = iv.times || {};
+  iv.times[pair.id] = ms;
   saveInterview();
-  sendAnswer(pair, value);
+  sendAnswer(pair, value, ms);
   markSelection();
   clearTimeout(app.advanceTimer);
   const indexAtClick = iv.index;
@@ -469,6 +498,7 @@ async function startInterview() {
   show('screen-loading');
   if (!(await loadOutlets())) { show('screen-error'); return; }
   if (!app.interview.pairs.length) app.interview.pairs = generatePairs(app.outlets);
+  if (!app.interview.started) app.interview.started = new Date().toISOString();
   saveInterview();
   show('screen-survey');
   renderComparison();

@@ -7,9 +7,11 @@ Il sito invia i dati a **due** Google Form, tenuti separati di proposito:
 | **MBI Risposte** | i confronti a coppie e le domande finali | una per confronto, piu' una finale per questionario |
 | **MBI Estrazione** | le email per l'estrazione | una per ogni questionario completo con email |
 
-I due form hanno in comune solo `interview_id`. Serve a contare quante
-partecipazioni ha ogni email, ma le email non stanno nello stesso foglio delle
-risposte (e' quello che dice l'informativa del sito).
+I due form hanno in comune `interview_id` (il singolo questionario) e
+`respondent_id` (il browser). Servono a contare quante partecipazioni ha ogni
+email e a controllare come ha risposto chi partecipa all'estrazione, ma le email
+non stanno nello stesso foglio delle risposte (e' quello che dice l'informativa
+del sito).
 
 Finche' i codici non sono configurati il sito funziona lo stesso: non invia
 niente e scrive nella console del browser (F12, scheda Console) le righe che
@@ -24,7 +26,7 @@ Tempo necessario: circa 20 minuti.
 
 1. Vai su [forms.google.com](https://forms.google.com) e crea un modulo vuoto.
 2. Titolo: `MBI Risposte` (i rispondenti non lo vedono mai).
-3. Aggiungi **14 domande**, tutte di tipo **Risposta breve**, con questi titoli e
+3. Aggiungi **18 domande**, tutte di tipo **Risposta breve**, con questi titoli e
    in quest'ordine:
 
 | # | Titolo della domanda | Contenuto |
@@ -43,12 +45,16 @@ Tempo necessario: circa 20 minuti.
 | 12 | `freq_talk` | solo nella riga finale |
 | 13 | `freq_web` | solo nella riga finale |
 | 14 | `timestamp` | data e ora dell'invio |
+| 15 | `ms_risposta` | millisecondi fra la comparsa della coppia e la risposta; vuoto nella riga finale |
+| 16 | `inizio` | ora di inizio del questionario, solo nella riga finale |
+| 17 | `durata_sec` | secondi dall'inizio alla fine, pause comprese, solo nella riga finale |
+| 18 | `durata_attiva_sec` | somma dei tempi di risposta in secondi, senza le pause, solo nella riga finale |
 
 4. **Nessuna domanda obbligatoria.**
 
 ## Passo 2. Crea il form "MBI Estrazione"
 
-Stessa procedura, titolo `MBI Estrazione`, **4 domande** di tipo Risposta breve:
+Stessa procedura, titolo `MBI Estrazione`, **5 domande** di tipo Risposta breve:
 
 | # | Titolo della domanda |
 |---|---|
@@ -56,6 +62,7 @@ Stessa procedura, titolo `MBI Estrazione`, **4 domande** di tipo Risposta breve:
 | 2 | `gruppo` |
 | 3 | `interview_id` |
 | 4 | `timestamp` |
+| 5 | `respondent_id` |
 
 ## Passo 3. Impostazioni di entrambi i form
 
@@ -158,6 +165,20 @@ il parametro `g` che finisce nella colonna `gruppo`.
   `nonso` si scarta dalla stima ma si conta per la riconoscibilita'.
 - **Questionari completi.** Sono gli `interview_id` con la riga `sezione = fine`.
   Quelli senza riga finale sono parziali, ma i confronti risposti restano utili.
+- **Collegare le email alle risposte.** Unisci i due fogli su `interview_id`:
+  per ogni partecipazione all'estrazione hai tutte le risposte di quel
+  questionario. `respondent_id` (presente in entrambi) raggruppa i questionari
+  fatti dallo stesso browser, anche quelli senza email.
+- **Tempi e rispondenti troppo veloci.** Nella riga finale `durata_attiva_sec`
+  e' il tempo effettivo di risposta (le pause non contano); `durata_sec` include
+  le pause e le interruzioni. Per togliere i piu' veloci usa `durata_attiva_sec`
+  (per esempio il primo 1-5% della distribuzione, separatamente per gruppo). Per
+  il singolo confronto c'e' `ms_risposta`: risposte sotto i 700-800 millisecondi
+  sono difficilmente lette. Un altro segnale di risposte a caso e' scegliere quasi
+  sempre l'outlet nella stessa posizione (`risposta` uguale a `outlet_a`, oppure
+  sempre a `outlet_b`): con le posizioni casuali la quota attesa e' circa meta'.
+  Nota: se un rispondente torna indietro e risponde di nuovo, `ms_risposta`
+  della nuova riga misura solo l'ultima visualizzazione.
 - **Rispondenti ripetuti.** `respondent_id` e' lo stesso per tutti i questionari
   fatti dallo stesso browser: serve per un effetto del valutatore nel modello.
 - **Estrazione.** Nel foglio "MBI Estrazione" tieni solo le righe il cui
