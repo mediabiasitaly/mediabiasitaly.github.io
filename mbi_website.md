@@ -34,7 +34,10 @@
 ## Dati
 
 - Form "MBI Risposte": una riga per confronto, piu' una riga finale.
-- Form "MBI Estrazione": email, gruppo, interview_id.
+- Form "MBI Estrazione": email, gruppo, interview_id, respondent_id (collegabile
+  alle risposte).
+- Tempi: `ms_risposta` per ogni confronto; inizio, durata totale e durata attiva
+  nella riga finale.
 - Dettagli e regole di lettura dei dati: `GOOGLE_FORMS_SETUP.md`.
 
 ## Vincoli

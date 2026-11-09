@@ -234,8 +234,8 @@ p { margin: 0 0 1rem; }
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 8.5rem;
-  padding: 1rem 0.75rem;
+  min-height: 10.5rem;
+  padding: 0.9rem 0.75rem;
   background: var(--surface);
   border: 1.5px solid var(--line);
   border-radius: 8px;
@@ -246,17 +246,40 @@ p { margin: 0 0 1rem; }
 }
 .outlet:hover { border-color: var(--ink-soft); }
 .outlet[aria-pressed="true"] { border: 2.5px solid var(--ink); background: var(--selected); }
-.outlet img { max-height: 3.5rem; width: auto; margin-bottom: 0.6rem; }
+/* i loghi sono tutti su una tela 2:1 con il marchio gia' proporzionato; sotto
+   il logo una riga sottile separa l'immagine dal nome */
+.outlet img {
+  width: 100%;
+  max-width: 13rem;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
+  border-radius: 4px;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line);
+}
+.outlet[aria-pressed="true"] img { border-bottom-color: #b9c3d6; }
 .outlet-name { font-size: 1.15rem; font-weight: 650; line-height: 1.25; }
+.outlet img + .outlet-name { font-size: 0.9375rem; font-weight: 600; }
 .outlet-net { font-size: 0.875rem; color: var(--muted); margin-top: 0.2rem; }
 
+/* le due risposte alternative stanno al centro, una sotto l'altra, cosi' non
+   si confondono con la scelta fra l'outlet di sinistra e quello di destra */
 .alt-answers {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1.75rem;
 }
-.alt-answers .btn { font-weight: 500; font-size: 0.9375rem; padding: 0.7rem 0.8rem; }
+.alt-answers .btn {
+  width: 17rem;
+  max-width: 100%;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.55rem 0.8rem;
+}
 .alt-answers .btn[aria-pressed="true"] { background: var(--selected); border-width: 2.5px; }
 
 .nav-row {
@@ -312,7 +335,9 @@ legend { font-weight: 600; margin-bottom: 0.6rem; padding: 0; }
 
 @media (max-width: 30rem) {
   .masthead { margin-bottom: 2rem; }
-  .outlet { min-height: 7.5rem; }
+  .outlet { min-height: 9rem; padding: 0.6rem 0.5rem; }
   .outlet-name { font-size: 1.05rem; }
-  .alt-answers { grid-template-columns: 1fr; }
 }
+
+.howto { margin: 1.5rem 0; }
+.howto h2 { font-size: 1.125rem; margin-bottom: 0.5rem; }

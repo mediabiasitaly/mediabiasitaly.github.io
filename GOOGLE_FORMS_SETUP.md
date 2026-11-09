@@ -64,34 +64,57 @@ Stessa procedura, titolo `MBI Estrazione`, **5 domande** di tipo Risposta breve:
 | 4 | `timestamp` |
 | 5 | `respondent_id` |
 
-## Passo 3. Impostazioni di entrambi i form
+## Passo 3. Pubblica i form e controlla le impostazioni
 
-Nell'ingranaggio **Impostazioni**:
+Dal 2025 un Google Form nuovo non riceve risposte finche' non viene pubblicato,
+e finche' non e' pubblicato il menu non mostra "Ottieni link precompilato".
+Per ciascuno dei due form:
+
+1. In alto a destra clicca **Pubblica**.
+2. Nella finestra che si apre, alla voce sui rispondenti scegli **Chiunque abbia
+   il link**. Se il form e' limitato a un'organizzazione o a persone specifiche,
+   gli invii dal sito vengono rifiutati senza errori visibili.
+3. Conferma con **Pubblica**.
+
+Poi, nell'ingranaggio **Impostazioni**:
 
 - **Risposte, Raccogli indirizzi email**: *Non raccogliere* (l'email la mandiamo noi).
 - **Risposte, Limita a 1 risposta**: disattivato. Se e' attivo Google chiede il
   login e il sito non riesce a scrivere.
-- **Presentazione**: il messaggio di conferma non conta, nessuno lo vede.
-
-Se l'account e' di un'organizzazione (per esempio UniTo), controlla che il form
-**non sia limitato agli utenti dell'organizzazione**: in quel caso gli invii da
-fuori vengono rifiutati senza errori visibili.
 
 ## Passo 4. Recupera gli identificativi
 
-Per ciascun form servono l'**ID del form** e gli **entry ID** di ogni domanda.
+Per ciascun form servono due cose: l'**ID del form** (uno per form) e l'**entry
+ID** di ogni domanda (un numero per domanda). Si leggono tutti in un unico link,
+il "link precompilato".
 
-1. Apri il form in modifica, menu con i tre puntini, **Ottieni link precompilato**.
-2. Compila ogni campo con il suo stesso nome (nel campo `email` scrivi `email`,
-   in `gruppo` scrivi `gruppo`, e cosi' via): ti serve per riconoscerli.
-3. **Ottieni link**, poi **Copia link**. Il link e' fatto cosi':
+1. Apri il form in modifica (la pagina dove hai scritto le domande).
+2. In alto a destra, accanto al pulsante **Pubblica**, c'e' un'icona con **tre
+   puntini verticali**. Cliccala e scegli **Ottieni link precompilato**. Si apre
+   una nuova scheda con il form come lo vede un rispondente.
+3. In ogni campo scrivi **il nome del campo stesso**: nel campo `respondent_id`
+   scrivi `respondent_id`, nel campo `interview_id` scrivi `interview_id`, e cosi'
+   via per tutti. Serve solo a riconoscere i numeri nel link.
+4. In fondo al form clicca **Ottieni link**, poi, nel riquadro che compare in
+   basso, **Copia link**.
+5. Incolla il link in un file di testo. E' fatto cosi' (qui spezzato su piu' righe
+   per leggibilita'):
 
 ```
-https://docs.google.com/forms/d/e/1FAIpQLSc...ABC.../viewform?usp=pp_url&entry.123456789=respondent_id&entry.987654321=interview_id&...
+https://docs.google.com/forms/d/e/1FAIpQLSdAbCdEf123456/viewform?usp=pp_url
+  &entry.111111111=respondent_id
+  &entry.222222222=interview_id
+  &entry.333333333=gruppo
+  ...
 ```
 
-4. La parte fra `/d/e/` e `/viewform` e' l'**ID del form**.
-5. Ogni `entry.NNNNNNNNN=nome` ti dice l'entry ID di quel campo.
+6. Leggilo cosi':
+   - l'**ID del form** e' il pezzo lungo fra `/d/e/` e `/viewform`
+     (nell'esempio `1FAIpQLSdAbCdEf123456`);
+   - ogni coppia `entry.NUMERO=nome` ti dice che il campo `nome` ha come entry ID
+     `entry.NUMERO` (nell'esempio `gruppo` e' `entry.333333333`).
+
+Fai la stessa cosa per l'altro form. Alla fine hai due link, uno per form.
 
 ## Passo 5. Inserisci i codici in `assets/script.js`
 

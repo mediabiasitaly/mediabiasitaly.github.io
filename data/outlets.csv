@@ -1,62 +1,62 @@
 codename,name,type,pic,mixed,echobit
-tg5,Tg5,tg,,1,1
-tg1,Tg1,tg,,1,1
-tg2,Tg2,tg,,0,1
-rainews24,Rai News 24,tg,,0,1
-studioaperto,Studio Aperto,tg,,0,1
-tg3,Tg3,tg,,0,1
-tg4,Tg4,tg,,1,1
-skytg24,Sky TG24,tg,,0,1
-tgla7,Tg La7,tg,,1,1
-tgcom24,Tgcom24,tg,,0,1
-cinqueminuti,Cinque Minuti (Rai 1),talk,,0,1
-portaaporta,Porta a Porta (Rai 1),talk,,0,1
-mattinocinque,Mattino Cinque News (Canale 5),talk,,0,1
-fuoridalcoro,Fuori dal Coro (Rete 4),talk,,1,1
-drittoerovescio,Dritto e Rovescio (Rete 4),talk,,0,1
-quartarepubblica,Quarta Repubblica (Rete 4),talk,,1,1
-tg2post,Tg2 Post (Rai 2),talk,,0,1
-zonabianca,Zona Bianca (Rete 4),talk,,0,1
-cartabianca,È sempre Cartabianca (Rete 4),talk,,0,1
-chetempochefa,Che tempo che fa (Nove),talk,,0,1
-inmezzora,In mezz'ora (Rai 3),talk,,0,1
-tg3lineanotte,Tg3 Linea Notte (Rai 3),talk,,0,1
-ottoemezzo,Otto e Mezzo (La7),talk,,1,1
-cavalloetorre,Il cavallo e la torre (Rai 3),talk,,0,1
-agora,Agorà (Rai 3),talk,,0,1
-diariodelgiorno,Diario del Giorno (Rete 4),talk,,0,1
-lariachetira,L'aria che tira (La7),talk,,0,1
-propagandalive,Propaganda Live (La7),talk,,1,1
-tagada,Tagadà (La7),talk,,0,1
-dimartedi,diMartedì (La7),talk,,0,1
-piazzapulita,Piazzapulita (La7),talk,,0,1
-statodellecose,Lo Stato delle cose (Rai 3),talk,,0,0
-quattrodisera,4 di sera (Rete 4),talk,,0,0
-realpolitik,Realpolitik (Rete 4),talk,,0,0
-accordiedisaccordi,Accordi e disaccordi (Nove),talk,,0,0
-inaltreparole,In altre parole (La7),talk,,0,0
-fanpage,Fanpage,press,,0,1
-corriere,Corriere della Sera,press,,1,1
-repubblica,la Repubblica,press,,1,1
-ilfattoquotidiano,Il Fatto Quotidiano,press,,1,1
-ilmessaggero,Il Messaggero,press,,0,1
-ansa,ANSA,press,,0,1
-lastampa,La Stampa,press,,0,1
-ilsole24ore,Il Sole 24 Ore,press,,0,1
-open,Open,press,,0,1
-ilgiornale,il Giornale,press,,1,1
-lespresso,L'Espresso,press,,0,1
-adnkronos,Adnkronos,press,,0,1
-huffpost,HuffPost Italia,press,,0,1
-iltempo,Il Tempo,press,,0,1
-ilpost,Il Post,press,,0,1
-affaritaliani,Affaritaliani,press,,0,1
-libero,Libero,press,,1,1
-linkiesta,Linkiesta,press,,0,1
-agi,AGI,press,,0,1
-avvenire,Avvenire,press,,0,1
-ilfoglio,Il Foglio,press,,0,1
-ilmanifesto,il manifesto,press,,0,1
-ilriformista,Il Riformista,press,,0,1
-secoloditalia,Secolo d'Italia,press,,0,1
-domani,Domani,press,,0,1
+tg5,Tg5,tg,assets/loghi/tg5.png,1,1
+tg1,Tg1,tg,assets/loghi/tg1.png,1,1
+tg2,Tg2,tg,assets/loghi/tg2.png,0,1
+rainews24,Rai News 24,tg,assets/loghi/rainews24.png,0,1
+studioaperto,Studio Aperto,tg,assets/loghi/studioaperto.png,0,1
+tg3,Tg3,tg,assets/loghi/tg3.png,0,1
+tg4,Tg4,tg,assets/loghi/tg4.png,1,1
+skytg24,Sky TG24,tg,assets/loghi/skytg24.png,0,1
+tgla7,Tg La7,tg,assets/loghi/tgla7.png,1,1
+tgcom24,Tgcom24,tg,assets/loghi/tgcom24.png,0,1
+cinqueminuti,Cinque Minuti (Rai 1),talk,assets/loghi/cinqueminuti.png,0,1
+portaaporta,Porta a Porta (Rai 1),talk,assets/loghi/portaaporta.png,0,1
+mattinocinque,Mattino Cinque News (Canale 5),talk,assets/loghi/mattinocinque.png,0,1
+fuoridalcoro,Fuori dal Coro (Rete 4),talk,assets/loghi/fuoridalcoro.png,1,1
+drittoerovescio,Dritto e Rovescio (Rete 4),talk,assets/loghi/drittoerovescio.png,0,1
+quartarepubblica,Quarta Repubblica (Rete 4),talk,assets/loghi/quartarepubblica.png,1,1
+tg2post,Tg2 Post (Rai 2),talk,assets/loghi/tg2post.png,0,1
+zonabianca,Zona Bianca (Rete 4),talk,assets/loghi/zonabianca.png,0,1
+cartabianca,È sempre Cartabianca (Rete 4),talk,assets/loghi/cartabianca.png,0,1
+chetempochefa,Che tempo che fa (Nove),talk,assets/loghi/chetempochefa.png,0,1
+inmezzora,In mezz'ora (Rai 3),talk,assets/loghi/inmezzora.png,0,1
+tg3lineanotte,Tg3 Linea Notte (Rai 3),talk,assets/loghi/tg3lineanotte.png,0,1
+ottoemezzo,Otto e Mezzo (La7),talk,assets/loghi/ottoemezzo.png,1,1
+cavalloetorre,Il cavallo e la torre (Rai 3),talk,assets/loghi/cavalloetorre.png,0,1
+agora,Agorà (Rai 3),talk,assets/loghi/agora.png,0,1
+diariodelgiorno,Diario del Giorno (Rete 4),talk,assets/loghi/diariodelgiorno.png,0,1
+lariachetira,L'aria che tira (La7),talk,assets/loghi/lariachetira.png,0,1
+propagandalive,Propaganda Live (La7),talk,assets/loghi/propagandalive.png,1,1
+tagada,Tagadà (La7),talk,assets/loghi/tagada.png,0,1
+dimartedi,diMartedì (La7),talk,assets/loghi/dimartedi.png,0,1
+piazzapulita,Piazzapulita (La7),talk,assets/loghi/piazzapulita.png,0,1
+statodellecose,Lo Stato delle cose (Rai 3),talk,assets/loghi/statodellecose.png,0,0
+quattrodisera,4 di sera (Rete 4),talk,assets/loghi/quattrodisera.png,0,0
+realpolitik,Realpolitik (Rete 4),talk,assets/loghi/realpolitik.png,0,0
+accordiedisaccordi,Accordi e disaccordi (Nove),talk,assets/loghi/accordiedisaccordi.png,0,0
+inaltreparole,In altre parole (La7),talk,assets/loghi/inaltreparole.png,0,0
+fanpage,Fanpage,press,assets/loghi/fanpage.png,0,1
+corriere,Corriere della Sera,press,assets/loghi/corriere.png,1,1
+repubblica,la Repubblica,press,assets/loghi/repubblica.png,1,1
+ilfattoquotidiano,Il Fatto Quotidiano,press,assets/loghi/ilfattoquotidiano.png,1,1
+ilmessaggero,Il Messaggero,press,assets/loghi/ilmessaggero.png,0,1
+ansa,ANSA,press,assets/loghi/ansa.png,0,1
+lastampa,La Stampa,press,assets/loghi/lastampa.png,0,1
+ilsole24ore,Il Sole 24 Ore,press,assets/loghi/ilsole24ore.png,0,1
+open,Open,press,assets/loghi/open.png,0,1
+ilgiornale,il Giornale,press,assets/loghi/ilgiornale.png,1,1
+lespresso,L'Espresso,press,assets/loghi/lespresso.png,0,1
+adnkronos,Adnkronos,press,assets/loghi/adnkronos.png,0,1
+huffpost,HuffPost Italia,press,assets/loghi/huffpost.png,0,1
+iltempo,Il Tempo,press,assets/loghi/iltempo.png,0,1
+ilpost,Il Post,press,assets/loghi/ilpost.png,0,1
+affaritaliani,Affaritaliani,press,assets/loghi/affaritaliani.png,0,1
+libero,Libero,press,assets/loghi/libero.png,1,1
+linkiesta,Linkiesta,press,assets/loghi/linkiesta.png,0,1
+agi,AGI,press,assets/loghi/agi.png,0,1
+avvenire,Avvenire,press,assets/loghi/avvenire.png,0,1
+ilfoglio,Il Foglio,press,assets/loghi/ilfoglio.png,0,1
+ilmanifesto,il manifesto,press,assets/loghi/ilmanifesto.png,0,1
+ilriformista,Il Riformista,press,assets/loghi/ilriformista.png,0,1
+secoloditalia,Secolo d'Italia,press,assets/loghi/secoloditalia.png,0,1
+domani,Domani,press,assets/loghi/domani.png,0,1

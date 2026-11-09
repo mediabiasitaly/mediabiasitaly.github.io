@@ -67,7 +67,8 @@ const CONFIG = {
   SECTIONS: [
     { type: 'tg',    title: 'Telegiornali',                    n: 5 },
     { type: 'talk',  title: 'Programmi di approfondimento',    n: 12 },
-    { type: 'press', title: 'Giornali e siti di informazione', n: 13 },
+    { type: 'press', title: 'Giornali e siti di informazione', n: 13,
+      note: 'Cartaceo o online, come preferisci: pensa alla versione che leggi di più.' },
     { type: 'mixed', title: 'Confronti fra mezzi diversi',     n: 8,
       note: 'Da qui in poi le coppie mescolano telegiornali, programmi e giornali.' }
   ],
@@ -313,6 +314,8 @@ async function loadOutlets() {
     if (!res.ok) throw new Error('CSV non trovato');
     app.outlets = parseCSV(await res.text());
     app.outlets.forEach(o => { app.byCode[o.codename] = o; });
+    // precarico i loghi, cosi' passando da una coppia all'altra non compaiono in ritardo
+    app.outlets.forEach(o => { if (o.pic) { const img = new Image(); img.src = o.pic; } });
     return app.outlets.length > 0;
   } catch (e) {
     console.error('[MBI] errore nel caricare gli outlet:', e);
@@ -326,6 +329,13 @@ async function loadOutlets() {
 
 function directionText() {
   return 'più orientato a ' + app.interview.direzione;
+}
+
+// esempio dell'informativa, coerente con la direzione della domanda
+function exampleText() {
+  return app.interview.direzione === 'sinistra'
+    ? "se fra il Giornale e il Corriere della Sera scegli il Corriere come più orientato a sinistra, non stai dicendo che il Corriere è di sinistra, ma solo che sta più a sinistra del Giornale. Potresti considerarlo di centro, o anche di centro-destra."
+    : "se fra la Repubblica e il Corriere della Sera scegli il Corriere come più orientato a destra, non stai dicendo che il Corriere è di destra, ma solo che sta più a destra della Repubblica. Potresti considerarlo di centro, o anche di centro-sinistra.";
 }
 
 function currentPair() { return app.interview.pairs[app.interview.index]; }
@@ -548,6 +558,7 @@ function init() {
     startInterview();
   } else {
     $('consent-direction').textContent = directionText();
+    $('consent-example').textContent = exampleText();
     show('screen-consent');
   }
 }
