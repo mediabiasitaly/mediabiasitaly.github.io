@@ -19,7 +19,7 @@
       <!-- CONSENSO ---------------------------------------------------------->
       <section id="screen-consent" class="hidden">
         <h1>Prima di cominciare</h1>
-        <p class="lead">Ti mostriamo due mezzi di informazione alla volta, fra telegiornali, programmi di approfondimento e giornali, e ti chiediamo quale dei due è <strong id="consent-direction">più orientato a sinistra</strong>.</p>
+        <p class="lead">Ti mostriamo due mezzi di informazione alla volta, fra telegiornali, programmi di approfondimento e giornali, e ti chiediamo quale dei due è <strong id="consent-direction">più orientato a sinistra</strong> <span id="consent-paren">(o meno a destra)</span>.</p>
 
         <div class="howto">
           <h2>Che cosa vogliamo misurare</h2>
@@ -36,7 +36,17 @@
           <p>Come preferisci: pensa alla versione che leggi di più.</p>
         </div>
 
-        <p>Se due mezzi ti sembrano sulla stessa posizione, o se non ne conosci abbastanza almeno uno, usa i due pulsanti sotto la coppia. Sono 38 confronti, circa sei minuti, e puoi tornare indietro a correggere.</p>
+        <div class="howto">
+          <h2>Quando non sai scegliere</h2>
+          <p>Se le posizioni dei due mezzi ti sembrano troppo vicine per sceglierne uno, usa «Hanno posizioni troppo simili». Se non ne conosci almeno uno, o semplicemente non sai decidere, va benissimo «Non saprei».</p>
+        </div>
+
+        <div class="howto">
+          <h2>Se sbagli</h2>
+          <p>Se sbagli a cliccare, torna indietro e correggi. Non serve rivedere i confronti precedenti: ci interessa la tua prima impressione su ogni coppia.</p>
+        </div>
+
+        <p>Sono 38 confronti; alla fine ti chiediamo di collocare tre mezzi su una scala da 0 a 10 e qualche ultima domanda facoltativa. In tutto circa sette minuti.</p>
 
         <div class="consent-box">
           <p><strong>Informativa.</strong> La partecipazione è volontaria e puoi interrompere quando vuoi. Le risposte sono anonime e sono usate solo per ricerca accademica, in forma aggregata. I dati sono raccolti tramite Google Forms.</p>
@@ -76,20 +86,31 @@
         <div class="pair" id="pair"></div>
 
         <div class="alt-answers">
-          <button id="eq-btn" class="btn btn-quiet" aria-pressed="false">Sono sulla stessa posizione</button>
-          <button id="dk-btn" class="btn btn-quiet" aria-pressed="false">Non li conosco abbastanza</button>
+          <button id="eq-btn" class="btn btn-quiet" aria-pressed="false">Hanno posizioni troppo simili</button>
+          <button id="dk-btn" class="btn btn-quiet" aria-pressed="false">Non saprei</button>
         </div>
 
         <div class="nav-row">
           <button id="prev-btn" class="btn-link">Indietro</button>
           <button id="next-btn" class="btn-link">Avanti</button>
         </div>
-        <p class="keys" style="margin-top:1.5rem">Da tastiera: frecce sinistra e destra per scegliere, U per "stessa posizione", N per "non li conosco".</p>
+        <p class="keys" style="margin-top:1.5rem">Da tastiera: frecce sinistra e destra per scegliere, S per "posizioni troppo simili", N per "non saprei".</p>
+      </section>
+
+      <!-- COLLOCAZIONE SULLA SCALA 0-10 ----------------------------------------->
+      <section id="screen-scale" class="hidden">
+        <h1>Tre mezzi su una scala</h1>
+        <p>Ora colloca questi tre mezzi su una scala da 0 a 10, dove 0 è sinistra, 5 è il centro e 10 è destra. Pensa sempre alla loro linea editoriale. Se non sai collocarne uno, scegli «Non saprei».</p>
+        <div id="scale-items"></div>
+        <div class="nav-row">
+          <button id="scale-back-btn" class="btn-link">Indietro</button>
+          <button id="scale-next-btn" class="btn btn-primary">Avanti</button>
+        </div>
       </section>
 
       <!-- DOMANDE FINALI ------------------------------------------------------>
       <section id="screen-final" class="hidden">
-        <h1>Ultime quattro domande</h1>
+        <h1>Ultime domande</h1>
         <p class="small">Sono facoltative.</p>
 
         <fieldset>
@@ -107,8 +128,14 @@
           <div class="choices" data-name="freq_talk"></div>
         </fieldset>
         <fieldset>
-          <legend>i siti di giornali e testate di informazione</legend>
+          <legend>i giornali, cartacei o online</legend>
           <div class="choices" data-name="freq_web"></div>
+        </fieldset>
+
+        <!-- solo per i colleghi: compare se il link ha ?g=colleghi -->
+        <fieldset id="expertise-block" class="hidden">
+          <legend>Qual è il tuo campo di studi principale?</legend>
+          <div class="choices" data-name="expertise"></div>
         </fieldset>
 
         <div class="nav-row">

@@ -25,6 +25,9 @@
   a schermo casuale; nella sezione mista coppie sempre fra tipi diversi.
 - Scelta con un clic o da tastiera, avanzamento automatico, "Indietro" sempre
   disponibile.
+- Collocazione su una scala 0-10 (0 sinistra, 5 centro, 10 destra) di tre ancore
+  estratte a caso fra le 13 della sezione mista, con "Non saprei"; serve a fissare
+  zero e unita' della scala.
 - Domande finali facoltative: sicurezza complessiva (1-5), frequenza con cui si
   seguono telegiornali, approfondimento e siti di informazione.
 - Ripresa: un questionario interrotto nella stessa scheda riprende da dove era.

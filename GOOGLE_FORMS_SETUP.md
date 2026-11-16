@@ -26,7 +26,7 @@ Tempo necessario: circa 20 minuti.
 
 1. Vai su [forms.google.com](https://forms.google.com) e crea un modulo vuoto.
 2. Titolo: `MBI Risposte` (i rispondenti non lo vedono mai).
-3. Aggiungi **18 domande**, tutte di tipo **Risposta breve**, con questi titoli e
+3. Aggiungi **20 domande**, tutte di tipo **Risposta breve**, con questi titoli e
    in quest'ordine:
 
 | # | Titolo della domanda | Contenuto |
@@ -49,6 +49,8 @@ Tempo necessario: circa 20 minuti.
 | 16 | `inizio` | ora di inizio del questionario, solo nella riga finale |
 | 17 | `durata_sec` | secondi dall'inizio alla fine, pause comprese, solo nella riga finale |
 | 18 | `durata_attiva_sec` | somma dei tempi di risposta in secondi, senza le pause, solo nella riga finale |
+| 19 | `expertise` | campo di studi (solo colleghi, solo nella riga finale): `scienzapolitica`, `sociocom`, `altrasociologia`, `media`, `altro` |
+| 20 | `collocazioni` | solo nella riga finale: tre ancore collocate sulla scala 0-10, es. `tg5:7;repubblica:3;libero:nonso` (vuoto dopo i due punti se non ha risposto) |
 
 4. **Nessuna domanda obbligatoria.**
 
@@ -184,8 +186,11 @@ il parametro `g` che finisce nella colonna `gruppo`.
 - **Direzione della domanda.** Con `direzione = sinistra` l'outlet in `risposta`
   e' quello giudicato piu' a sinistra; con `destra` quello piu' a destra. Prima
   della stima va riportato tutto alla stessa direzione.
-- **Pareggi e non so.** `uguali` e' un pareggio (modello di Davidson);
-  `nonso` si scarta dalla stima ma si conta per la riconoscibilita'.
+- **Pareggi e non so.** `uguali` ("Hanno posizioni troppo simili") e' un
+  pareggio (modello di Davidson); `nonso` ("Non saprei") si scarta dalla stima.
+- **Prima risposta o ultima.** Le istruzioni chiedono di tornare indietro solo
+  per correggere errori di clic. Di default si tiene l'ultima riga per confronto;
+  come controllo di robustezza si puo' usare la prima.
 - **Questionari completi.** Sono gli `interview_id` con la riga `sezione = fine`.
   Quelli senza riga finale sono parziali, ma i confronti risposti restano utili.
 - **Collegare le email alle risposte.** Unisci i due fogli su `interview_id`:
@@ -202,6 +207,14 @@ il parametro `g` che finisce nella colonna `gruppo`.
   sempre a `outlet_b`): con le posizioni casuali la quota attesa e' circa meta'.
   Nota: se un rispondente torna indietro e risponde di nuovo, `ms_risposta`
   della nuova riga misura solo l'ultima visualizzazione.
+- **Collocazioni sulla scala 0-10.** In `collocazioni` ci sono tre ancore estratte
+  a caso fra le 13 della sezione mista, con il valore dato (0 sinistra, 5 centro,
+  10 destra; `nonso` se "Non saprei"). La scala e' fissa e non dipende da
+  `direzione`. Servono a dare alla scala Bradley-Terry uno zero e un'unita' di
+  misura: o con un modello congiunto (Bradley-Terry/Davidson per i confronti e
+  Aldrich-McKelvey per le collocazioni, con la stessa posizione latente), o con una
+  trasformazione lineare dei punteggi Bradley-Terry stimata sulle collocazioni medie
+  delle ancore.
 - **Rispondenti ripetuti.** `respondent_id` e' lo stesso per tutti i questionari
   fatti dallo stesso browser: serve per un effetto del valutatore nel modello.
 - **Estrazione.** Nel foglio "MBI Estrazione" tieni solo le righe il cui

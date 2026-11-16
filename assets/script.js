@@ -50,7 +50,12 @@ const CONFIG = {
     ms_risposta:   'entry.455160610',
     inizio:        'entry.1132708696',
     durata_sec:    'entry.98289760',
-    durata_attiva_sec: 'entry.1902027220'
+    durata_attiva_sec: 'entry.1902027220',
+    // campo di studi, compilato solo dai colleghi
+    expertise:     'entry.256286103',
+    // collocazione di tre ancore sulla scala 0-10, in un unico campo:
+    // "tg5:7;repubblica:3;libero:nonso"
+    collocazioni:  'entry.1879374012'
   },
 
   // Form 2: email per l'estrazione. Sostituire ID_FORM_EMAIL e gli entry.XXXX.
@@ -74,7 +79,7 @@ const CONFIG = {
   ],
 
   GROUPS: {
-    studenti: { prize: "Lascia la tua email per partecipare all'estrazione di tre buoni caffè per il bar del Campus Luigi Einaudi. Ogni questionario completo vale una partecipazione." },
+    studenti: { prize: "Lascia la tua email per partecipare all'estrazione di tre buoni da 10 caffè ciascuno per il bar del Campus Luigi Einaudi. Ogni questionario completo vale una partecipazione." },
     colleghi: { prize: "Lascia la tua email per partecipare all'estrazione di tre buoni Amazon da 50 euro. Ogni questionario completo vale una partecipazione." },
     altro:    { prize: "Lascia la tua email per partecipare all'estrazione dei premi. Ogni questionario completo vale una partecipazione." }
   },
@@ -86,7 +91,12 @@ const CONFIG = {
 const FINAL_QUESTIONS = {
   sicurezza: [['1', 'Per niente'], ['2', 'Poco'], ['3', 'Abbastanza'], ['4', 'Molto'], ['5', 'Del tutto']],
   freq: [['giorno', 'Ogni giorno'], ['settimana', 'Qualche volta a settimana'],
-         ['mese', 'Qualche volta al mese'], ['raramente', 'Più raramente'], ['mai', 'Mai']]
+         ['mese', 'Qualche volta al mese'], ['raramente', 'Più raramente'], ['mai', 'Mai']],
+  expertise: [['scienzapolitica', 'Scienza politica'],
+              ['sociocom', 'Sociologia della comunicazione o comunicazione politica'],
+              ['altrasociologia', 'Altra sociologia'],
+              ['media', 'Studi sui media o giornalismo'],
+              ['altro', 'Altro']]
 };
 
 // ============================================================================
@@ -139,7 +149,7 @@ function splitName(name) {
 function $(id) { return document.getElementById(id); }
 
 function show(screenId) {
-  ['screen-consent', 'screen-loading', 'screen-error', 'screen-survey', 'screen-final', 'screen-end']
+  ['screen-consent', 'screen-loading', 'screen-error', 'screen-survey', 'screen-scale', 'screen-final', 'screen-end']
     .forEach(id => $(id).classList.toggle('hidden', id !== screenId));
   window.scrollTo(0, 0);
 }
@@ -204,6 +214,9 @@ function sendFinal() {
     freq_tg: f.freq_tg || '',
     freq_talk: f.freq_talk || '',
     freq_web: f.freq_web || '',
+    expertise: f.expertise || '',
+    collocazioni: (app.interview.anchors || [])
+      .map(c => c + ':' + ((app.interview.placements || {})[c] ?? '')).join(';'),
     inizio: app.interview.started,
     durata_sec: Math.round((Date.now() - Date.parse(app.interview.started)) / 1000),
     durata_attiva_sec: Math.round(active / 1000),
@@ -290,6 +303,8 @@ function newInterview() {
     index: 0,
     final: {},
     times: {},
+    anchors: [],
+    placements: {},
     started: null
   };
 }
@@ -329,6 +344,11 @@ async function loadOutlets() {
 
 function directionText() {
   return 'più orientato a ' + app.interview.direzione;
+}
+
+// "piu' a sinistra" vuol dire anche "meno a destra", e viceversa
+function parenText() {
+  return app.interview.direzione === 'sinistra' ? '(o meno a destra)' : '(o meno a sinistra)';
 }
 
 // esempio dell'informativa, coerente con la direzione della domanda
@@ -371,8 +391,9 @@ function renderComparison() {
   $('section-note').textContent = section.note || '';
   $('section-note').classList.toggle('hidden', !(section.note && position === 1));
 
-  $('question').innerHTML = 'Quale dei due è <strong></strong>?';
+  $('question').innerHTML = 'Quale dei due è <strong></strong> <span class="paren"></span>?';
   $('question').querySelector('strong').textContent = directionText();
+  $('question').querySelector('.paren').textContent = parenText();
 
   const box = $('pair');
   box.innerHTML = '';
@@ -415,7 +436,7 @@ function goNext() {
     saveInterview();
     renderComparison();
   } else {
-    showFinal();
+    showScale();
   }
 }
 
@@ -435,7 +456,7 @@ function onKey(e) {
   const pair = currentPair();
   if (e.key === 'ArrowLeft') { e.preventDefault(); answer(pair.a); }
   else if (e.key === 'ArrowRight') { e.preventDefault(); answer(pair.b); }
-  else if (e.key === 'u' || e.key === 'U') { answer('uguali'); }
+  else if (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U') { answer('uguali'); }
   else if (e.key === 'n' || e.key === 'N') { answer('nonso'); }
 }
 
@@ -446,7 +467,7 @@ function onKey(e) {
 function buildChoices() {
   document.querySelectorAll('#screen-final .choices').forEach(box => {
     const name = box.dataset.name;
-    const options = name === 'sicurezza' ? FINAL_QUESTIONS.sicurezza : FINAL_QUESTIONS.freq;
+    const options = FINAL_QUESTIONS[name] || FINAL_QUESTIONS.freq;
     box.innerHTML = '';
     options.forEach(([value, label]) => {
       const l = document.createElement('label');
@@ -461,8 +482,56 @@ function buildChoices() {
   });
 }
 
+// ============================================================================
+// COLLOCAZIONE SULLA SCALA 0-10
+// ============================================================================
+// Tre ancore per questionario, scala fissa: 0 sinistra, 5 centro, 10 destra
+// (indipendente dalla direzione della domanda nei confronti). Servono a dare
+// alla scala Bradley-Terry uno zero e un'unita' di misura.
+
+function showScale() {
+  const iv = app.interview;
+  iv.placements = iv.placements || {};
+  const box = $('scale-items');
+  box.innerHTML = '';
+  iv.anchors.forEach(code => {
+    const o = app.byCode[code];
+    const n = splitName(o.name);
+    const item = document.createElement('div');
+    item.className = 'scale-item';
+    item.innerHTML = '<div class="scale-head">' + (o.pic ? '<img alt="" src="' + o.pic + '">' : '') +
+      '<div><div class="outlet-name"></div>' + (n.net ? '<div class="outlet-net"></div>' : '') + '</div></div>' +
+      '<div class="scale-points" role="group"></div>' +
+      '<div class="scale-labels"><span>0 sinistra</span><span>5 centro</span><span>10 destra</span></div>' +
+      '<button class="btn btn-quiet scale-dk" aria-pressed="false">Non saprei</button>';
+    item.querySelector('.outlet-name').textContent = n.main;
+    if (n.net) item.querySelector('.outlet-net').textContent = n.net;
+    item.querySelector('.scale-points').setAttribute('aria-label', 'Posizione di ' + o.name + ' da 0 sinistra a 10 destra');
+    const points = item.querySelector('.scale-points');
+    const dk = item.querySelector('.scale-dk');
+    const mark = () => {
+      const v = iv.placements[code];
+      points.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === String(v))));
+      dk.setAttribute('aria-pressed', String(v === 'nonso'));
+    };
+    for (let v = 0; v <= 10; v++) {
+      const b = document.createElement('button');
+      b.textContent = v;
+      b.dataset.v = String(v);
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => { iv.placements[code] = String(v); saveInterview(); mark(); });
+      points.appendChild(b);
+    }
+    dk.addEventListener('click', () => { iv.placements[code] = 'nonso'; saveInterview(); mark(); });
+    mark();
+    box.appendChild(item);
+  });
+  show('screen-scale');
+}
+
 function showFinal() {
   buildChoices();
+  $('expertise-block').classList.toggle('hidden', app.group !== 'colleghi');
   Object.entries(app.interview.final).forEach(([name, value]) => {
     const input = document.querySelector('#screen-final input[name="' + name + '"][value="' + value + '"]');
     if (input) input.checked = true;
@@ -509,6 +578,10 @@ async function startInterview() {
   if (!(await loadOutlets())) { show('screen-error'); return; }
   if (!app.interview.pairs.length) app.interview.pairs = generatePairs(app.outlets);
   if (!app.interview.started) app.interview.started = new Date().toISOString();
+  if (!app.interview.anchors || !app.interview.anchors.length) {
+    // tre ancore a caso fra quelle della sezione mista, da collocare sulla scala 0-10
+    app.interview.anchors = shuffle(app.outlets.filter(o => o.mixed === '1')).slice(0, 3).map(o => o.codename);
+  }
   saveInterview();
   show('screen-survey');
   renderComparison();
@@ -538,7 +611,9 @@ function init() {
   $('dk-btn').addEventListener('click', () => answer('nonso'));
   $('prev-btn').addEventListener('click', goPrevious);
   $('next-btn').addEventListener('click', goNext);
-  $('final-back-btn').addEventListener('click', () => { show('screen-survey'); renderComparison(); });
+  $('final-back-btn').addEventListener('click', showScale);
+  $('scale-back-btn').addEventListener('click', () => { show('screen-survey'); renderComparison(); });
+  $('scale-next-btn').addEventListener('click', showFinal);
   $('final-btn').addEventListener('click', finish);
   $('email-btn').addEventListener('click', submitEmail);
   $('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitEmail(); });
@@ -558,6 +633,7 @@ function init() {
     startInterview();
   } else {
     $('consent-direction').textContent = directionText();
+    $('consent-paren').textContent = parenText();
     $('consent-example').textContent = exampleText();
     show('screen-consent');
   }
