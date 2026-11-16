@@ -89,7 +89,7 @@ const CONFIG = {
 };
 
 const FINAL_QUESTIONS = {
-  sicurezza: [['1', 'Per niente'], ['2', 'Poco'], ['3', 'Abbastanza'], ['4', 'Molto'], ['5', 'Del tutto']],
+  sicurezza: [['1', 'Per niente'], ['2', 'Poco'], ['3', 'Abbastanza'], ['4', 'Molto'], ['5', 'Completamente']],
   freq: [['giorno', 'Ogni giorno'], ['settimana', 'Qualche volta a settimana'],
          ['mese', 'Qualche volta al mese'], ['raramente', 'Più raramente'], ['mai', 'Mai']],
   expertise: [['scienzapolitica', 'Scienza politica'],
